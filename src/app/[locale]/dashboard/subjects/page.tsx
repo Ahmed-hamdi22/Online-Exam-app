@@ -71,7 +71,7 @@ export default function GetQuizForm() {
           onChange={(e) => setSearch(e.target.value)}
         />
         <div className="flex justify-end gap-4">
-          <button className="bg-primary text-white px-4 py-2 rounded-full ">
+          <button className="bg-[#5573ea]  text-white px-4 py-2 rounded-full ">
             Start Quiz
           </button>
           <img
@@ -96,7 +96,7 @@ export default function GetQuizForm() {
                     alt={subject.name}
                     className="w-full h-72 object-cover rounded-lg"
                   />
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-primary  w-3/4 bg-opacity-80 text-white px-3 py-1 rounded text-center">
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-[#5573ea]   w-3/4 bg-opacity-80 text-white px-3 py-1 rounded text-center">
                     <h6>{subject.name}</h6>
                   </div>
                 </Link>

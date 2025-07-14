@@ -29,7 +29,7 @@ export default function Statistics() {
         {/* Progress Bar */}
         <div className="relative h-3 w-[80%] bg-gray-100 rounded-full overflow-hidden">
           <div
-            className="absolute top-0 left-0 h-full bg-primary rounded-full"
+            className="absolute top-0 left-0 h-full bg-[#5573ea]  rounded-full"
             style={{ width: "60%" }}
           ></div>
         </div>

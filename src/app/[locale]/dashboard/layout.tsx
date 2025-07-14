@@ -31,7 +31,7 @@ export default function DashboardLayout({
   return (
     <div>
       {/* Mobile Header */}
-      <div className="flex items-center justify-between bg-primary p-4 md:hidden">
+      <div className="flex items-center justify-between bg-[#5573ea] p-4 md:hidden">
         <div className="flex items-center gap-3">
           <button onClick={toggleMenu}>
             <i className="fa-solid fa-bars text-white text-xl"></i>

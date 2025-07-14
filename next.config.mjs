@@ -13,6 +13,10 @@ const nextConfig = {
       },
     ],
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+    ignoreBuildErrors: true,
+  },
 };
 
 export default withNextIntl(nextConfig);

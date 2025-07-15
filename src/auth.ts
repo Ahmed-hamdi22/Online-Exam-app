@@ -37,7 +37,7 @@ export const authOptions: NextAuthOptions = {
         email: {},
         password: {},
       },
-      authorize: async (credentials) => {
+      authorize: async (credentials, req) => {
         const response = await fetch(`${process.env.API}/auth/signin`, {
           method: "POST",
           body: JSON.stringify({
@@ -53,20 +53,35 @@ export const authOptions: NextAuthOptions = {
 
         // If login was successful, return the user data alongside the token
         if (payload.message === "success") {
-          // Save the token in cookies separately
-          cookies().set("token", payload.token, {
+          const { token: authToken, user } = payload as {
+            token: string;
+            user: LoginResponse["user"];
+          };
+
+          cookies().set("token", authToken, {
             httpOnly: true,
           });
 
-          // Return user data alongside the token
+          // Ensure the returned object includes an 'id' property for NextAuth
           return {
-            token: payload.token,
-            ...payload.user,
+            id: user._id, // or user.id if that's the correct field
+            token: authToken,
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            phone: user.phone,
+            role: user.role,
+            _id: user._id,
+            createdAt: user.createdAt,
           };
         }
 
         // Otherwise, throw the error returned from the backend
-        throw new AppError(payload.message, payload.code);
+        throw new AppError(
+          payload.message,
+          (payload as any).code ?? "UNKNOWN_ERROR"
+        );
       },
     }),
   ],

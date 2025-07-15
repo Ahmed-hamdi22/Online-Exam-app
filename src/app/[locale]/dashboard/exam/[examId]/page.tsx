@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import AppError from "@/lib/utils/app-error";
 import { useParams } from "next/navigation";
 import { Loader } from "lucide-react";
-import QuizApp from "../../component/quiz/[quizeId]";
+import QuizApp from "../../component";
 
 export default function GetExams() {
   const [exams, setExams] = useState<

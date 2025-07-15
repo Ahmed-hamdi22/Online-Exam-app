@@ -1,4 +1,4 @@
-import QuizApp from "@/components/QuizApp";
+import QuizApp from "../..";
 
 export default function QuizAppPage({
   params,

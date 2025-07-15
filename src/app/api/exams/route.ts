@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
   const response = await fetch(`${process.env.API}/exams?subject=${examId}`, {
     headers: {
       ...JSON_HEADER,
-      token: token.token,
+      token: token?.token ?? "",
     },
   });
 

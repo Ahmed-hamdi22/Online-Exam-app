@@ -1,12 +1,12 @@
-import { NextAuthOptions, User } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { JSON_HEADER } from "./lib/constants/api.constant";
 import AppError from "./lib/utils/app-error";
 import { cookies } from "next/headers";
 import GithubProvider from "next-auth/providers/github";
-import GoogleProvider from "next-auth/providers/google";
-import FacebookProvider from "next-auth/providers/facebook";
-import TwitterProvider from "next-auth/providers/twitter";
+import GoogleProfile from "next-auth/providers/google";
+import FacebookProfile from "next-auth/providers/facebook";
+import TwitterProfile from "next-auth/providers/twitter";
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -18,15 +18,15 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
     }),
-    GoogleProvider({
+    GoogleProfile({
       clientId: process.env.GOOGLE_ID as string,
       clientSecret: process.env.GOOGLE_SECRET as string,
     }),
-    FacebookProvider({
+    FacebookProfile({
       clientId: process.env.FACEBOOK_ID as string,
       clientSecret: process.env.FACEBOOK_SECRET as string,
     }),
-    TwitterProvider({
+    TwitterProfile({
       clientId: process.env.TWITTER_ID as string,
       clientSecret: process.env.TWITTER_SECRET as string,
     }),
@@ -37,7 +37,7 @@ export const authOptions: NextAuthOptions = {
         email: {},
         password: {},
       },
-      authorize: async (credentials, req): Promise<User | null> => {
+      authorize: async (credentials) => {
         const response = await fetch(`${process.env.API}/auth/signin`, {
           method: "POST",
           body: JSON.stringify({
@@ -51,32 +51,22 @@ export const authOptions: NextAuthOptions = {
 
         const payload: APIResponse<LoginResponse> = await response.json();
 
-        if (
-          payload.message === "success" &&
-          "token" in payload &&
-          "user" in payload
-        ) {
+        // If login was successful, return the user data alongside the token
+        if (payload.message === "success") {
+          // Save the token in cookies separately
           cookies().set("token", payload.token, {
             httpOnly: true,
           });
 
+          // Return user data alongside the token
           return {
-            id: payload.user._id, // ← هذا المطلوب من NextAuth
             token: payload.token,
-            username: payload.user.username,
-            firstName: payload.user.firstName,
-            lastName: payload.user.lastName,
-            email: payload.user.email,
-            phone: payload.user.phone,
-            role: payload.user.role,
-            _id: payload.user._id,
-          } as unknown as User;
+            ...payload.user,
+          };
         }
 
-        throw new AppError(
-          payload.message,
-          "code" in payload ? payload.code : 500
-        );
+        // Otherwise, throw the error returned from the backend
+        throw new AppError(payload.message, payload.code);
       },
     }),
   ],

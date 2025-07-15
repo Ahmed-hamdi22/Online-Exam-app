@@ -1,5 +1,5 @@
 import Providers from "@/components/providers";
-import { routing } from "@/i18n/routing";
+import { Locale, routing } from "@/i18n/routing";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -17,7 +17,7 @@ export default function LocaleLayout({
   params: { locale },
   children,
 }: LocaleLayoutProps) {
-  if (!routing.locales.includes(locale)) notFound();
+  if (!routing.locales.includes(locale as Locale)) notFound();
 
   setRequestLocale(locale);
 

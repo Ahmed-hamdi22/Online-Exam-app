@@ -7,13 +7,16 @@ import { Loader } from "lucide-react";
 import Statistics from "@/components/common/statistics";
 
 export default function GetQuizForm() {
+  // State
   const [subjects, setSubjects] = useState<
     Array<{ _id: string; name: string; icon: string }>
   >([]);
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
+  // useEffect
   useEffect(() => {
     async function fetchSubjects() {
       try {

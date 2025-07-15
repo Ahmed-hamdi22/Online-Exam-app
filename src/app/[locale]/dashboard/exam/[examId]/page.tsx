@@ -1,14 +1,20 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
 import AppError from "@/lib/utils/app-error";
 import { useParams } from "next/navigation";
-import QuizApp from "../../component/quiz/[quizeId]/page";
 import { Loader } from "lucide-react";
+import QuizApp from "../../component/quiz/[quizeId]";
 
 export default function GetExams() {
-  const [exams, setExams] = useState<Array<{ _id: string; title: string; numberOfQuestions: number; duration: number }>>([]);
+  const [exams, setExams] = useState<
+    Array<{
+      _id: string;
+      title: string;
+      numberOfQuestions: number;
+      duration: number;
+    }>
+  >([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -84,14 +90,14 @@ export default function GetExams() {
           onChange={(e) => setSearch(e.target.value)}
         />
         <img
-          className="w-10 h-10 rounded-full"
+          className="w-10 h-10 md:visible hidden rounded-full"
           src="/images/img.png"
           alt="User"
         />
       </div>
 
       <div className="bg-white shadow-lg p-6 rounded-lg">
-        <h5 className="text-primary text-lg font-semibold mb-4">Exams</h5>
+        <h5 className="text-blue-600 text-lg font-semibold mb-4">Exams</h5>
         <div className="space-y-4">
           {filteredExams.length === 0 ? (
             <p className="text-gray-500">No exams found</p>
@@ -110,7 +116,7 @@ export default function GetExams() {
                 <div className="text-center space-y-1">
                   <p className="text-gray-700">{exam.duration} Minutes</p>
                   <button
-                    className="bg-primary text-white px-6 py-1 rounded-full"
+                    className="bg-blue-600 text-white px-6 py-1 rounded-full"
                     onClick={() => openPopup(exam._id)}
                   >
                     Start

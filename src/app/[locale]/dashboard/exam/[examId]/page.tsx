@@ -26,7 +26,7 @@ export default function GetExams() {
     async function fetchExams() {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/exams?subject=${examId}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/exams?subject=${examId}`
         );
         const payload = await response.json();
 

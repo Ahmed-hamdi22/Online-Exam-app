@@ -20,7 +20,10 @@ export default function GetQuizForm() {
   useEffect(() => {
     async function fetchSubjects() {
       try {
-        const response = await fetch("http://localhost:3000/api/subjects");
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/subjects`
+        );
+
         const payload = await response.json();
 
         if (!response.ok) {

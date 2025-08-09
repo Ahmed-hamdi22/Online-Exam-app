@@ -38,7 +38,7 @@ export default function QuizApp({ quizeId }: QuizAppProps) {
     const fetchQuiz = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3000/api/questions?exam=${quizeId}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/questions?exam=${quizeId}`
         );
         const payload = await response.json();
 

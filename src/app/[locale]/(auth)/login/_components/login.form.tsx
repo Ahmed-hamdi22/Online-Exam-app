@@ -17,6 +17,7 @@ import Link from 'next/link';
 export default function LoginForm() {
   const t = useTranslations();
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -44,17 +45,26 @@ export default function LoginForm() {
 
     const response = await signIn('credentials', {
       ...values,
-      redirect: true,
+      redirect: false,
     });
 
     setLoading(false);
 
     if (response?.ok) {
-      router.replace(response.url || '/dashboard/subjects');
+      const checkSession = async () => {
+        const res = await fetch('/api/auth/session');
+        const session = await res.json();
+        if (session?.user) {
+          router.push('/dashboard/subjects');
+        } else {
+          setTimeout(checkSession, 100);
+        }
+      };
+      checkSession();
       return;
     }
 
-    setError(response?.error || t('fallback-error-message'));
+    setError(response?.error || t('incorrect-email-or-password'));
   };
 
   return (
@@ -88,8 +98,6 @@ export default function LoginForm() {
             name="password"
             control={form.control}
             render={({ field }) => {
-              const [showPassword, setShowPassword] = useState(false);
-
               return (
                 <FormItem className="relative">
                   <Input

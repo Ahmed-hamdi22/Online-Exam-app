@@ -1,8 +1,14 @@
 'use client';
 
-import FeedbackMessage from '@/components/common/feedback-message';
 import { Button } from '@/components/ui/button';
-import { Form, FormField, FormItem, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useRouter } from '@/i18n/routing';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,13 +17,14 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Eye, EyeOff, Loader } from 'lucide-react';
+import { Loader } from 'lucide-react';
 import Link from 'next/link';
+import FeedBack from '@/components/shared/feedback';
 
 export default function LoginForm() {
+  // Translation
   const t = useTranslations();
   const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -68,134 +75,67 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex flex-col gap-8 justify-center items-center w-full">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col w-full gap-4"
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-full max-w-md flex flex-col"
+      >
+        {/* Email */}
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem className="mb-4 autofill">
+              <FormLabel>Email</FormLabel>
+
+              <FormControl>
+                <Input placeholder="Email" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* PassWord */}
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+
+              <FormControl>
+                <Input type="password" placeholder="******" {...field} />
+              </FormControl>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Forgot Password */}
+        <Link
+          href="/forgot-password"
+          className="font-medium text-sm text-blue-600 text-end mb-16 mt-6"
         >
-          <h3 className="text-2xl font-semibold mb-4">{t('login-title')}</h3>
+          Forgot your Password ?
+        </Link>
 
-          {/* Email Field */}
-          <FormField
-            name="email"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem>
-                <Input
-                  {...field}
-                  type="email"
-                  placeholder={t('email-placeholder')}
-                  className="mb-1 rounded-2xl h-10 border border-gray-300 focus:border-[#3366b8] focus:ring-0"
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        {/* FeedBack */}
+        {/* <FeedBack className="mb-6">{error?.message}</FeedBack> */}
+        <FeedBack className="mb-6">{error}</FeedBack>
 
-          {/* Password Field */}
-          <FormField
-            name="password"
-            control={form.control}
-            render={({ field }) => {
-              return (
-                <FormItem className="relative">
-                  <Input
-                    {...field}
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder={t('password-placeholder')}
-                    className="mb-1 rounded-2xl h-10 border border-gray-300 focus:border-[#3366b8] focus:ring-0"
-                  />
-
-                  {/* Eye Icon */}
-                  <div
-                    className="absolute bottom-3 right-3 flex items-center cursor-pointer"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="w-5 h-5 text-gray-500" />
-                    ) : (
-                      <Eye className="w-5 h-5 text-gray-500" />
-                    )}
-                  </div>
-
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-
-          <Link
-            href="/forgot-password"
-            className="text-right text-blue-500 hover:underline text-sm mt-1 block"
-          >
-            {t('recover-password')}
-          </Link>
-
-          <FeedbackMessage>{error}</FeedbackMessage>
-
-          <Button
-            type="submit"
-            className="w-full mt-2  bg-[#122D9C] rounded-2xl"
-            disabled={
-              loading || (form.formState.isSubmitted && !form.formState.isValid)
-            }
-          >
-            {loading ? <Loader /> : t('login')}
-          </Button>
-        </form>
-      </Form>
-
-      {/* Social Providers */}
-      <div className="text-center mt-3">
-        <p>{t('or-continue-with')}</p>
-        <div className="flex justify-center mt-4">
-          <div
-            onClick={() =>
-              signIn('google', { callbackUrl: '/dashboard/subjects' })
-            }
-            className="login-item flex justify-center items-center hover:shadow-lg border p-2 shadow-md rounded-lg cursor-pointer mx-1"
-          >
-            <img
-              className="w-5 h-5"
-              alt="google"
-              src={'/images/Logo Google.png'}
-            />
-          </div>
-          <div
-            onClick={() =>
-              signIn('facebook', { callbackUrl: '/dashboard/subjects' })
-            }
-            className="login-item flex justify-center items-center hover:shadow-lg border p-2 shadow-md rounded-lg cursor-pointer mx-1"
-          >
-            <img
-              className="w-5 h-5"
-              alt="facebook"
-              src={'/images/Vector.png'}
-            />
-          </div>
-          <div
-            onClick={() =>
-              signIn('twitter', { callbackUrl: '/dashboard/subjects' })
-            }
-            className="login-item flex justify-center items-center hover:shadow-lg border p-2 shadow-md rounded-lg cursor-pointer mx-1"
-          >
-            <img className="w-5 h-5" alt="twitter" src={'/images/Logo.png'} />
-          </div>
-          <div
-            onClick={() =>
-              signIn('github', { callbackUrl: '/dashboard/subjects' })
-            }
-            className="login-item flex justify-center items-center hover:shadow-lg border p-2 shadow-md rounded-lg cursor-pointer mx-1"
-          >
-            <img
-              className="w-5 h-5"
-              alt="github"
-              src={'/images/Logo (1).png'}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+        {/* Submit */}
+        <Button
+          className=" text-white w-full bg-blue-600 hover:bg-blue-700 "
+          type="submit"
+          disabled={
+            loading || (form.formState.isSubmitted && !form.formState.isValid)
+          }
+        >
+          {loading ? <Loader /> : t('login')}
+        </Button>
+      </form>
+    </Form>
   );
 }

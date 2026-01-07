@@ -1,17 +1,18 @@
-import { NextAuthOptions } from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import { JSON_HEADER } from "./lib/constants/api.constant";
-import AppError from "./lib/utils/app-error";
-import { cookies } from "next/headers";
-import GithubProvider from "next-auth/providers/github";
-import GoogleProfile from "next-auth/providers/google";
-import FacebookProfile from "next-auth/providers/facebook";
-import TwitterProfile from "next-auth/providers/twitter";
+import { NextAuthOptions } from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
+import { JSON_HEADER } from './lib/constants/api.constant';
+import AppError from './lib/utils/app-error';
+import { cookies } from 'next/headers';
+import GithubProvider from 'next-auth/providers/github';
+import GoogleProfile from 'next-auth/providers/google';
+import FacebookProfile from 'next-auth/providers/facebook';
+import TwitterProfile from 'next-auth/providers/twitter';
+import { LoginResponse } from './lib/types/auth';
 
 export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: "/login",
-    error: "/login",
+    signIn: '/login',
+    error: '/login',
   },
   providers: [
     GithubProvider({
@@ -32,14 +33,14 @@ export const authOptions: NextAuthOptions = {
     }),
 
     Credentials({
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {
         email: {},
         password: {},
       },
       authorize: async (credentials, req) => {
         const response = await fetch(`${process.env.API}/auth/signin`, {
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify({
             email: credentials?.email,
             password: credentials?.password,
@@ -52,13 +53,13 @@ export const authOptions: NextAuthOptions = {
         const payload: APIResponse<LoginResponse> = await response.json();
 
         // If login was successful, return the user data alongside the token
-        if (payload.message === "success") {
+        if (payload.message === 'success') {
           const { token: authToken, user } = payload as {
             token: string;
-            user: LoginResponse["user"];
+            user: LoginResponse['user'];
           };
 
-          cookies().set("token", authToken, {
+          cookies().set('token', authToken, {
             httpOnly: true,
           });
 
@@ -80,7 +81,7 @@ export const authOptions: NextAuthOptions = {
         // Otherwise, throw the error returned from the backend
         throw new AppError(
           payload.message,
-          (payload as any).code ?? "UNKNOWN_ERROR"
+          (payload as any).code ?? 'UNKNOWN_ERROR'
         );
       },
     }),

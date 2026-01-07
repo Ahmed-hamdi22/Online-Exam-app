@@ -5,19 +5,30 @@ declare type User = {
   lastName: string;
   role: string;
   phone: string;
-  
 } & DatabaseFields;
-
-declare type LoginResponse = {
+export type LoginResponse = {
   token: string;
-  user: User;
+  user: {
+    _id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    role: string;
+    isVerified: boolean;
+    createdAt: string;
+  };
 };
 
-declare type RegisterFields = {
-  username: string;
-  firstName: string;
-  lastName: string;
-  password: string;
-  email: string;
-  rePassword: string;
+export type VerifyOpt = {
+  message: 'success';
+};
+
+export type forgotPasswordResponse = {
+  info: string;
+};
+
+export type NewPasswordResponse = {
+  token: string;
 };

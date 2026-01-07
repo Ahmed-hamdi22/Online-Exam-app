@@ -1,4 +1,4 @@
-import createNextIntlPlugin from "next-intl/plugin";
+import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin();
 
@@ -7,9 +7,9 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "e-commerce.thelanerealestate.com",
-        pathname: "/images/**",
+        protocol: 'https',
+        hostname: 'e-commerce.thelanerealestate.com',
+        pathname: '/images/**',
       },
     ],
   },

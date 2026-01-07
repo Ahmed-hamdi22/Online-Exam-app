@@ -126,7 +126,7 @@ export default function LoginForm() {
           />
 
           <Link
-            href="/forget-password"
+            href="/forgot-password"
             className="text-right text-blue-500 hover:underline text-sm mt-1 block"
           >
             {t('recover-password')}
@@ -135,6 +135,7 @@ export default function LoginForm() {
           <FeedbackMessage>{error}</FeedbackMessage>
 
           <Button
+            type="submit"
             className="w-full mt-2  bg-[#122D9C] rounded-2xl"
             disabled={
               loading || (form.formState.isSubmitted && !form.formState.isValid)

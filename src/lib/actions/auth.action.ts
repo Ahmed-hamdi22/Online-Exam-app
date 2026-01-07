@@ -23,7 +23,6 @@ export async function registerActoin(values: registerValues) {
   });
 
   const payload: APIResponse<LoginResponse> = await response.json();
-  console.log(payload);
 
   return payload;
 }
@@ -53,7 +52,6 @@ export async function verifyOtp(restcode: otpValues) {
     body: JSON.stringify(restcode),
   });
   const payload: APIResponse<VerifyOpt> = await respone.json();
-  console.log(payload);
 
   return payload;
 }
@@ -71,7 +69,6 @@ export async function NewPaswordAction(
     body: JSON.stringify(values),
   });
   const payload: APIResponse<NewPasswordResponse> = await respone.json();
-  console.log(payload);
 
   return payload;
 }

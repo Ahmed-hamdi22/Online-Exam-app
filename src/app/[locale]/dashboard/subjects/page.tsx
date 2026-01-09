@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import AppError from "@/lib/utils/app-error";
-import { Loader } from "lucide-react";
-import Statistics from "@/components/common/statistics";
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import AppError from '@/lib/utils/app-error';
+import { Loader } from 'lucide-react';
+import Statistics from '@/components/common/statistics';
 
 export default function GetQuizForm() {
   // State
@@ -12,9 +12,9 @@ export default function GetQuizForm() {
     Array<{ _id: string; name: string; icon: string }>
   >([]);
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   // useEffect
   useEffect(() => {
@@ -28,19 +28,19 @@ export default function GetQuizForm() {
 
         if (!response.ok) {
           throw new AppError(
-            payload.message || "Failed to fetch subjects",
+            payload.message || 'Failed to fetch subjects',
             response.status
           );
         }
 
         if (!payload.subjects || !Array.isArray(payload.subjects)) {
-          setError("No subjects found or invalid data.");
+          setError('No subjects found or invalid data.');
           return;
         }
 
         setSubjects(payload.subjects);
       } catch (err: any) {
-        setError(err.message || "An unexpected error occurred.");
+        setError(err.message || 'An unexpected error occurred.');
       } finally {
         setLoading(false);
       }

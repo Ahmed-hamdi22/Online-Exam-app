@@ -1,6 +1,6 @@
-import Link from "next/link";
-import React from "react";
-import ForgotPasswordLayout from "./_components/forgot-password-layout";
+import Link from 'next/link';
+import React from 'react';
+import ForgotPasswordLayout from './_components/forgot-password-layout';
 
 export default function page() {
   return (

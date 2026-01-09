@@ -6,6 +6,8 @@ declare type User = {
   role: string;
   phone: string;
 } & DatabaseFields;
+
+
 export type LoginResponse = {
   token: string;
   user: {

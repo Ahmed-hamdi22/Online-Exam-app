@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import AppError from "@/lib/utils/app-error";
-import { useParams } from "next/navigation";
-import { Loader } from "lucide-react";
-import QuizApp from "../../component";
+import { useEffect, useState } from 'react';
+import AppError from '@/lib/utils/app-error';
+import { useParams } from 'next/navigation';
+import { Loader } from 'lucide-react';
+import QuizApp from '../../component';
 
 export default function GetExams() {
   const [exams, setExams] = useState<
@@ -15,9 +15,9 @@ export default function GetExams() {
       duration: number;
     }>
   >([]);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [selectedExamId, setSelectedExamId] = useState<string | null>(null);
   const [popupVisible, setPopupVisible] = useState(false);
   const { examId } = useParams<{ examId: string }>();
@@ -32,19 +32,19 @@ export default function GetExams() {
 
         if (!response.ok) {
           throw new AppError(
-            payload.message || "Failed to fetch exams",
+            payload.message || 'Failed to fetch exams',
             response.status
           );
         }
 
         if (!payload.exams || !Array.isArray(payload.exams)) {
-          setError("No exams found or invalid data.");
+          setError('No exams found or invalid data.');
           return;
         }
 
         setExams(payload.exams);
       } catch (err: any) {
-        setError(err.message || "An unexpected error occurred.");
+        setError(err.message || 'An unexpected error occurred.');
       } finally {
         setLoading(false);
       }

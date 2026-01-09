@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormField,
@@ -8,20 +8,19 @@ import {
   FormLabel,
   FormMessage,
   FormControl,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-// import { registerSchema } from "@/lib/schemes/authschema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { MoveRight } from "lucide-react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import z from "zod";
-import useForgotPassword from "../_hooks/use-forgot-password";
-import FeedBack from "@/components/shared/feedback";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { MoveRight } from 'lucide-react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import z from 'zod';
+import useForgotPassword from '../_hooks/use-forgot-password';
+import FeedBack from '@/components/shared/feedback';
 
 type EmailStepProps = {
   email: string | null;
   setEmail: (email: string) => void;
-  setStep: (step: "email" | "otp" | "password") => void;
+  setStep: (step: 'email' | 'otp' | 'password') => void;
 };
 
 export default function EmailStep({
@@ -31,7 +30,7 @@ export default function EmailStep({
 }: EmailStepProps) {
   // New schema just for email
   const emailSchema = z.object({
-    email: z.string().email("Please enter a valid email"),
+    email: z.string().email('Please enter a valid email'),
   });
   type EmailSchema = z.infer<typeof emailSchema>;
   //Mutation
@@ -42,7 +41,7 @@ export default function EmailStep({
   const form = useForm<EmailSchema>({
     resolver: zodResolver(emailSchema),
     defaultValues: {
-      email: email || "",
+      email: email || '',
     },
   });
 
@@ -50,7 +49,7 @@ export default function EmailStep({
     message(values.email, {
       onSuccess: () => {
         setEmail(values.email);
-        setStep("otp");
+        setStep('otp');
       },
     });
     console.log(values);

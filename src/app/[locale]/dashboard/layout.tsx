@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
-import { useTranslations } from "next-intl";
+import { useState } from 'react';
+import Link from 'next/link';
+import { signOut } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 export default function DashboardLayout({
   children,
@@ -17,15 +17,13 @@ export default function DashboardLayout({
   // State
   const [menuVisible, setMenuVisible] = useState(false);
 
-  // Navgation
-  const router = useRouter();
-
+  // Functions
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
 
   const handleLogout = () => {
-    signOut({ callbackUrl: "/login" });
+    signOut({ callbackUrl: '/login' });
   };
 
   return (
@@ -45,7 +43,12 @@ export default function DashboardLayout({
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50">
           <div className="bg-white w-64 h-full p-4">
             <div className="flex justify-between items-center mb-6">
-              <img src="/images/Logo2.png" alt="Logo" className="w-32" />
+              <Image
+                src="/images/Logo2.png"
+                alt="Logo"
+                width={128}
+                height={128}
+              />
               <button onClick={toggleMenu}>
                 <i className="fa-solid fa-times text-xl"></i>
               </button>
@@ -57,7 +60,7 @@ export default function DashboardLayout({
                   className="flex items-center gap-2 text-lg text-blue-700"
                 >
                   <i className="fa-solid fa-house"></i>
-                  {t("dashboard")}
+                  {t('dashboard')}
                 </Link>
               </li>
               <li>
@@ -66,7 +69,7 @@ export default function DashboardLayout({
                   className="flex items-center gap-2 text-lg text-blue-700"
                 >
                   <i className="fa-regular fa-clock"></i>
-                  {t("quiz-history")}
+                  {t('quiz-history')}
                 </Link>
               </li>
               <li>
@@ -74,8 +77,8 @@ export default function DashboardLayout({
                   onClick={handleLogout}
                   className="flex items-center gap-2 text-lg text-blue-700"
                 >
-                  <i className="fa-solid fa-arrow-right-from-bracket"></i>{" "}
-                  {t("log-out")}
+                  <i className="fa-solid fa-arrow-right-from-bracket"></i>{' '}
+                  {t('log-out')}
                 </button>
               </li>
             </ul>
@@ -86,7 +89,13 @@ export default function DashboardLayout({
       <div className="flex">
         {/* Sidebar */}
         <div className="hidden md:flex flex-col text-white w-64 p-6 min-h-screen">
-          <img src="/images/Logo2.png" alt="Logo" className="mb-10" />
+          <Image
+            src="/images/Logo2.png"
+            alt="Logo"
+            width={128}
+            height={128}
+            className="my-8"
+          />
           <ul className="space-y-6">
             <li>
               <Link

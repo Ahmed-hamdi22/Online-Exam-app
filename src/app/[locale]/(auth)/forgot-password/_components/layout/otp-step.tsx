@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { otpSchema, otpValues } from "@/lib/schemes/authschema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import FeedBack from "@/components/shared/feedback";
+import { otpSchema, otpValues } from '@/lib/schemes/authschema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button';
+import FeedBack from '@/components/shared/feedback';
 import {
   Form,
   FormControl,
@@ -11,18 +11,19 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { SubmitHandler, useForm } from "react-hook-form";
+} from '@/components/ui/form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSeparator,
   InputOTPSlot,
-} from "@/components/ui/input-otp";
-import useOtp from "../../_hooks/use-verify-otp";
+} from '@/components/ui/input-otp';
+import useOtp from '../../_hooks/use-verify-otp';
+import RenendOtp from './resend-otp';
 
 type OtpStepProps = {
-  setStep: (step: "email" | "otp" | "password") => void;
+  setStep: (step: 'email' | 'otp' | 'password') => void;
   email: string;
 };
 export default function OtpStep({ setStep, email }: OtpStepProps) {
@@ -34,7 +35,7 @@ export default function OtpStep({ setStep, email }: OtpStepProps) {
   const form = useForm<otpValues>({
     resolver: zodResolver(otpSchema),
     defaultValues: {
-      resetCode: "",
+      resetCode: '',
     },
   });
 
@@ -46,7 +47,7 @@ export default function OtpStep({ setStep, email }: OtpStepProps) {
       },
       {
         onSuccess: () => {
-          setStep("password");
+          setStep('password');
         },
       }
     );
@@ -93,6 +94,8 @@ export default function OtpStep({ setStep, email }: OtpStepProps) {
             </FormItem>
           )}
         />
+
+        <RenendOtp email={email} />
 
         {/* FeedBack */}
         <FeedBack className="mb-6">{error?.message}</FeedBack>

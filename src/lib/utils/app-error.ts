@@ -1,7 +1,7 @@
-import { ZodError } from "zod";
+import { ZodError } from 'zod';
 
 export default class AppError {
-  protected message: string | ZodError[] = "";
+  protected message: string | ZodError[] = '';
   protected statusCode: number = 500;
 
   constructor(message: string | ZodError[], statusCode: number) {

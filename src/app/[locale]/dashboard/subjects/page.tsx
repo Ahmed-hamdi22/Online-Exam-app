@@ -1,59 +1,32 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import AppError from '@/lib/utils/app-error';
+import Image from 'next/image';
 import { Loader } from 'lucide-react';
-import Statistics from '@/components/common/statistics';
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { fetchSubjects } from '@/lib/actions/exam/exams.action';
 
 export default function GetQuizForm() {
-  // State
-  const [subjects, setSubjects] = useState<
-    Array<{ _id: string; name: string; icon: string }>
-  >([]);
-
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
+  //State
   const [search, setSearch] = useState('');
 
-  // useEffect
-  useEffect(() => {
-    async function fetchSubjects() {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/subjects`
-        );
+  // Fetch subjects using react-query
+  const {
+    data: subjects = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery<subjects[], Error>({
+    queryKey: ['subjects'],
+    queryFn: fetchSubjects,
+  });
 
-        const payload = await response.json();
-
-        if (!response.ok) {
-          throw new AppError(
-            payload.message || 'Failed to fetch subjects',
-            response.status
-          );
-        }
-
-        if (!payload.subjects || !Array.isArray(payload.subjects)) {
-          setError('No subjects found or invalid data.');
-          return;
-        }
-
-        setSubjects(payload.subjects);
-      } catch (err: any) {
-        setError(err.message || 'An unexpected error occurred.');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchSubjects();
-  }, []);
-
-  const filteredQuizes = subjects.filter((subject) =>
+  const filteredQuizes = subjects.filter((subject: subjects) =>
     subject.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader />
@@ -61,13 +34,16 @@ export default function GetQuizForm() {
     );
   }
 
-  if (error) {
-    return <p className="text-red-500 text-center mt-4">Error: {error}</p>;
+  if (isError) {
+    return (
+      <p className="text-red-500 text-center mt-4">
+        Error: {(error as Error).message}
+      </p>
+    );
   }
 
   return (
     <div className="space-y-6">
-      <Statistics />
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-6">
         <input
           type="text"
@@ -76,33 +52,29 @@ export default function GetQuizForm() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <div className="flex justify-end gap-4">
-          <button className="bg-[#5573ea]  text-white px-4 py-2 rounded-full ">
-            Start Quiz
-          </button>
-          <img
-            className="w-10 h-10 rounded-full hidden md:visible"
-            src="images/img.png"
-            alt="User"
-          />
-        </div>
+        <button className="bg-[#5573ea] text-white px-4 py-2 rounded-full">
+          Start Quiz
+        </button>
       </div>
 
       <div className="bg-white shadow-lg p-6 rounded-lg">
-        <h5 className="text-primary text-lg font-semibold mb-4">Quizes</h5>
+        <h5 className="text-primary text-lg font-semibold mb-4">Quizzes</h5>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {filteredQuizes.length === 0 ? (
             <p className="text-gray-500">No quizzes found</p>
           ) : (
-            filteredQuizes.map((subject: any) => (
+            filteredQuizes.map((subject: subjects) => (
               <div key={subject._id} className="relative group">
-                <Link href={`/dashboard/exam/${subject._id}`}>
-                  <img
+                <Link href={`/dashboard/exams`}>
+                  <Image
                     src={subject.icon}
                     alt={subject.name}
+                    width={400}
+                    height={288}
                     className="w-full h-72 object-cover rounded-lg"
                   />
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-[#5573ea]   w-3/4 bg-opacity-80 text-white px-3 py-1 rounded text-center">
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-[#5573ea] w-3/4 bg-opacity-80 text-white px-3 py-1 rounded text-center">
                     <h6>{subject.name}</h6>
                   </div>
                 </Link>

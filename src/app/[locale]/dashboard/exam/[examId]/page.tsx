@@ -1,57 +1,29 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import AppError from '@/lib/utils/app-error';
+import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Loader } from 'lucide-react';
 import QuizApp from '../../component';
+import { useQuery } from '@tanstack/react-query';
+import { getExamById } from '@/lib/actions/exam/exams.action';
 
 export default function GetExams() {
-  const [exams, setExams] = useState<
-    Array<{
-      _id: string;
-      title: string;
-      numberOfQuestions: number;
-      duration: number;
-    }>
-  >([]);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
+  const { examId } = useParams<{ examId: string }>();
   const [search, setSearch] = useState('');
   const [selectedExamId, setSelectedExamId] = useState<string | null>(null);
   const [popupVisible, setPopupVisible] = useState(false);
-  const { examId } = useParams<{ examId: string }>();
 
-  useEffect(() => {
-    async function fetchExams() {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/exams?subject=${examId}`
-        );
-        const payload = await response.json();
-
-        if (!response.ok) {
-          throw new AppError(
-            payload.message || 'Failed to fetch exams',
-            response.status
-          );
-        }
-
-        if (!payload.exams || !Array.isArray(payload.exams)) {
-          setError('No exams found or invalid data.');
-          return;
-        }
-
-        setExams(payload.exams);
-      } catch (err: any) {
-        setError(err.message || 'An unexpected error occurred.');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchExams();
-  }, [examId]);
+  // React Query hook
+  const {
+    data: exams = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['exam', examId],
+    queryFn: () => getExamById(examId!),
+    enabled: !!examId, // only fetch if examId exists
+  });
 
   const filteredExams = exams.filter((exam) =>
     exam.title.toLowerCase().includes(search.toLowerCase())
@@ -67,7 +39,7 @@ export default function GetExams() {
     setSelectedExamId(null);
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loader />
@@ -75,8 +47,12 @@ export default function GetExams() {
     );
   }
 
-  if (error) {
-    return <p className="text-red-500 text-center mt-4">Error: {error}</p>;
+  if (isError) {
+    return (
+      <p className="text-red-500 text-center mt-4">
+        Error: {(error as Error).message}
+      </p>
+    );
   }
 
   return (
@@ -88,11 +64,6 @@ export default function GetExams() {
           placeholder="Search Exam"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-        />
-        <img
-          className="w-10 h-10 md:visible hidden rounded-full"
-          src="/images/img.png"
-          alt="User"
         />
       </div>
 

@@ -8,8 +8,8 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'e-commerce.thelanerealestate.com',
-        pathname: '/images/**',
+        hostname: 'exam.elevateegy.com',
+        pathname: '**',
       },
     ],
   },

@@ -12,6 +12,6 @@ export async function GET(req: NextRequest) {
     },
   });
 
-  const payload = await response.json();
+  const payload: APIResponse<subjects> = await response.json();
   return NextResponse.json(payload);
 }

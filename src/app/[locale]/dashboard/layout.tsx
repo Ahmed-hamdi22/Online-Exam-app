@@ -105,14 +105,7 @@ export default function DashboardLayout({
                 <i className="fa-solid fa-house"></i> Dashboard
               </Link>
             </li>
-            <li>
-              <Link
-                href="/history"
-                className="flex items-center gap-2  text-blue-700"
-              >
-                <i className="fa-regular fa-clock"></i> Quiz History
-              </Link>
-            </li>
+
             <li>
               <button
                 onClick={handleLogout}

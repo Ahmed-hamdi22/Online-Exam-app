@@ -1,62 +1,48 @@
-import { withAuth } from 'next-auth/middleware';
 import createMiddleware from 'next-intl/middleware';
 import { NextRequest } from 'next/server';
 import { LOCALES, routing } from './i18n/routing';
 import { getToken } from 'next-auth/jwt';
+import { NextResponse } from 'next/server';
 
 const authPages = ['/login', '/register', '/forgot-password'];
-const publicPages = [...authPages];
-
 const handleI18nRouting = createMiddleware(routing);
 
-const authMiddleware = withAuth(
-  function onSuccess(req) {
-    return handleI18nRouting(req);
-  },
-  {
-    callbacks: {
-      authorized: ({ token }) => token != null,
-    },
-    pages: {
-      signIn: '/login',
-    },
-  }
-);
-
 export default async function middleware(req: NextRequest) {
-  const token = await getToken({ req });
-
-  const publicPathnameRegex = RegExp(
-    `^(/(${LOCALES.join('|')}))?(${publicPages.flatMap((p) => (p === '/' ? ['', '/'] : p)).join('|')})/?$`,
-    'i'
+  const pathname = req.nextUrl.pathname;
+  const locale = LOCALES.find(
+    (value) => pathname === `/${value}` || pathname.startsWith(`/${value}/`)
   );
-  const authPathnameRegex = RegExp(
-    `^(/(${LOCALES.join('|')}))?(${authPages.flatMap((p) => (p === '/' ? ['', '/'] : p)).join('|')})/?$`,
-    'i'
+  const localPath = locale ? pathname.slice(locale.length + 1) || '/' : pathname;
+  const localePrefix = locale ? `/${locale}` : '';
+
+  if (localPath === '/') {
+    return NextResponse.redirect(
+      new URL(`${localePrefix}/dashboard/subjects`, req.url)
+    );
+  }
+
+  const isAuthPage = authPages.some(
+    (page) => localPath === page || localPath === `${page}/`
   );
+  const isQuizPage = /^\/dashboard\/component\/quiz\/[^/]+\/?$/.test(localPath);
 
-  const isPublicPage = publicPathnameRegex.test(req.nextUrl.pathname);
-  const isAuthPage = authPathnameRegex.test(req.nextUrl.pathname);
+  if (isAuthPage || isQuizPage) {
+    const token = await getToken({ req });
 
-  if (req.nextUrl.pathname === '/') {
-    if (token) {
-      const redirectUrl = new URL('/dashboard/subjects', req.nextUrl.origin);
-      return handleI18nRouting(new NextRequest(redirectUrl, req));
-    } else {
-      const redirectUrl = new URL('/login', req.nextUrl.origin);
-      return handleI18nRouting(new NextRequest(redirectUrl, req));
+    if (isQuizPage && !token?.token) {
+      const loginUrl = new URL(`${localePrefix}/login`, req.url);
+      loginUrl.searchParams.set('callbackUrl', pathname + req.nextUrl.search);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    if (isAuthPage && token?.token) {
+      return NextResponse.redirect(
+        new URL(`${localePrefix}/dashboard/subjects`, req.url)
+      );
     }
   }
 
-  if (isPublicPage) {
-    if (token && isAuthPage) {
-      const redirectUrl = new URL('/dashboard/subjects', req.nextUrl.origin);
-      return handleI18nRouting(new NextRequest(redirectUrl, req));
-    }
-    return handleI18nRouting(req);
-  }
-
-  return (authMiddleware as any)(req);
+  return handleI18nRouting(req);
 }
 
 export const config = {

@@ -4,6 +4,9 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const token = await getToken({ req });
+  if (!token?.token) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  }
   const { searchParams } = new URL(req.url); // Get query params from request URL
   const quizeId = searchParams.get('exam');
 
@@ -13,13 +16,13 @@ export async function GET(req: NextRequest) {
       { status: 400 }
     );
   }
-  const response = await fetch(`${process.env.API}/questions?exam=${quizeId}`, {
+  const response = await fetch(`${process.env.API}/questions?exam=${encodeURIComponent(quizeId)}`, {
     headers: {
       ...JSON_HEADER,
-      token: token?.token ?? '',
+      token: token.token,
     },
   });
 
   const payload = await response.json();
-  return NextResponse.json(payload);
+  return NextResponse.json(payload, { status: response.status });
 }

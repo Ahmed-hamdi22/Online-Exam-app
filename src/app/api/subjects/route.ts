@@ -8,10 +8,10 @@ export async function GET(req: NextRequest) {
   const response = await fetch(process.env.API + '/subjects', {
     headers: {
       ...JSON_HEADER,
-      token: token?.token ?? '',
+      ...(token?.token ? { token: token.token } : {}),
     },
   });
 
   const payload: APIResponse<subjects> = await response.json();
-  return NextResponse.json(payload);
+  return NextResponse.json(payload, { status: response.status });
 }

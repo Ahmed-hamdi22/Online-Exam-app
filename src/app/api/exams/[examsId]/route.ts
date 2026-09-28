@@ -7,10 +7,6 @@ export async function GET(
   { params }: { params: { examsId: string } }
 ) {
   const token = await getToken({ req });
-  if (!token?.token) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   const { examsId } = params;
 
   if (!examsId) {
@@ -19,7 +15,10 @@ export async function GET(
 
   try {
     const response = await fetch(`${process.env.API}/exams/${examsId}`, {
-      headers: { ...JSON_HEADER, token: token.token },
+      headers: {
+        ...JSON_HEADER,
+        ...(token?.token ? { token: token.token } : {}),
+      },
     });
     if (!response.ok) {
       const text = await response.text();

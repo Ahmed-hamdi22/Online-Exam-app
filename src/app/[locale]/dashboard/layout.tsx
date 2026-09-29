@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
 
 export default function DashboardLayout({
   children,
@@ -13,6 +14,7 @@ export default function DashboardLayout({
 }) {
   // Translations
   const t = useTranslations();
+  const { status } = useSession();
 
   // State
   const [menuVisible, setMenuVisible] = useState(false);
@@ -23,7 +25,7 @@ export default function DashboardLayout({
   };
 
   const handleLogout = () => {
-    signOut({ callbackUrl: '/login' });
+    signOut({ callbackUrl: '/dashboard/subjects' });
   };
 
   return (
@@ -72,15 +74,30 @@ export default function DashboardLayout({
                   {t('quiz-history')}
                 </Link>
               </li>
-              <li>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-2 text-lg text-blue-700"
-                >
-                  <i className="fa-solid fa-arrow-right-from-bracket"></i>{' '}
-                  {t('log-out')}
-                </button>
-              </li>
+              {status === 'authenticated' ? (
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 text-lg text-blue-700"
+                  >
+                    <i className="fa-solid fa-arrow-right-from-bracket"></i>{' '}
+                    {t('log-out')}
+                  </button>
+                </li>
+              ) : status === 'unauthenticated' ? (
+                <>
+                  <li>
+                    <Link href="/login" className="text-lg text-blue-700">
+                      {t('login')}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/register" className="text-lg text-blue-700">
+                      {t('Register')}
+                    </Link>
+                  </li>
+                </>
+              ) : null}
             </ul>
           </div>
         </div>
@@ -106,14 +123,29 @@ export default function DashboardLayout({
               </Link>
             </li>
 
-            <li>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2  text-blue-700"
-              >
-                <i className="fa-solid fa-arrow-right-from-bracket"></i> Log Out
-              </button>
-            </li>
+            {status === 'authenticated' ? (
+              <li>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 text-blue-700"
+                >
+                  <i className="fa-solid fa-arrow-right-from-bracket"></i> {t('log-out')}
+                </button>
+              </li>
+            ) : status === 'unauthenticated' ? (
+              <>
+                <li>
+                  <Link href="/login" className="text-blue-700">
+                    {t('login')}
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/register" className="text-blue-700">
+                    {t('Register')}
+                  </Link>
+                </li>
+              </>
+            ) : null}
           </ul>
         </div>
         {/* Main Content */}

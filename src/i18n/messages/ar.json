@@ -57,5 +57,8 @@
   " Question ": "سؤال",
   "log-out": "تسجيل الخروج",
   "quiz-history": "تاريخ مسابقة",
-  "dashboard": "لوحة القيادة"
+  "dashboard": "لوحة القيادة",
+  "start-exam": "ابدأ الاختبار",
+  "sign-in-to-start": "سجّل الدخول لبدء الاختبار",
+  "browse-exams": "تصفّح الاختبارات"
 }

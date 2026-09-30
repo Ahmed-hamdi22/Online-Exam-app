@@ -1,14 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Loader } from 'lucide-react';
 import QuizApp from '../../component';
 import { useQuery } from '@tanstack/react-query';
 import { getExamById } from '@/lib/actions/exam/exams.action';
+import { useSession } from 'next-auth/react';
+import { useLocale, useTranslations } from 'next-intl';
 
 export default function GetExams() {
   const { examId } = useParams<{ examId: string }>();
+  const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations();
+  const { status } = useSession();
   const [search, setSearch] = useState('');
   const [selectedExamId, setSelectedExamId] = useState<string | null>(null);
   const [popupVisible, setPopupVisible] = useState(false);
@@ -30,6 +36,11 @@ export default function GetExams() {
   );
 
   const openPopup = (examId: string) => {
+    if (status !== 'authenticated') {
+      const quizUrl = `/${locale}/dashboard/component/quiz/${examId}`;
+      router.push(`/${locale}/login?callbackUrl=${encodeURIComponent(quizUrl)}`);
+      return;
+    }
     setSelectedExamId(examId);
     setPopupVisible(true);
   };
@@ -89,8 +100,11 @@ export default function GetExams() {
                   <button
                     className="bg-blue-600 text-white px-6 py-1 rounded-full"
                     onClick={() => openPopup(exam._id)}
+                    disabled={status === 'loading'}
                   >
-                    Start
+                    {status === 'unauthenticated'
+                      ? t('sign-in-to-start')
+                      : t('start-exam')}
                   </button>
                 </div>
               </div>

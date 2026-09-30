@@ -63,5 +63,8 @@
   " Question ": " Question ",
   "log-out": "Log Out",
   "quiz-history": " Quiz History",
-  "dashboard": " Dashboard"
+  "dashboard": " Dashboard",
+  "start-exam": "Start",
+  "sign-in-to-start": "Sign in to start",
+  "browse-exams": "Browse exams"
 }

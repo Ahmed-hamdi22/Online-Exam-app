@@ -20,7 +20,7 @@ import { Loader } from 'lucide-react';
 import { PhoneInput } from '@/components/ui/phone-input';
 import { useRouter } from 'next/navigation';
 import useRegister from '../_hook/use-register';
-export default function RegisterForm() {
+export default function RegisterForm({ loginHref }: { loginHref: string }) {
   const router = useRouter();
   const form = useForm<registerValues>({
     defaultValues: {
@@ -42,7 +42,7 @@ export default function RegisterForm() {
   const onSubmit: SubmitHandler<registerValues> = (values) => {
     register(values, {
       onSuccess: () => {
-        router.push('/login');
+        router.push(loginHref);
       },
 
       onError: (err: unknown) => {

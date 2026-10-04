@@ -21,9 +21,7 @@ export async function getExamById(examId: string) {
 
 // fetch questions by quizeI
 export const fetchQuestions = async (quizeId: string): Promise<Question[]> => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/questions?exam=${quizeId}`
-  );
+  const res = await fetch(`/api/questions?exam=${encodeURIComponent(quizeId)}`);
   const payload = await res.json();
 
   if (!res.ok) {

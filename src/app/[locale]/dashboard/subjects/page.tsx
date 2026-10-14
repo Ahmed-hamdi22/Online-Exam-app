@@ -6,8 +6,10 @@ import { Loader } from 'lucide-react';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchSubjects } from '@/lib/actions/exam/exams.action';
+import { useTranslations } from 'next-intl';
 
 export default function GetQuizForm() {
+  const t = useTranslations();
   //State
   const [search, setSearch] = useState('');
 
@@ -52,9 +54,12 @@ export default function GetQuizForm() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <button className="bg-[#5573ea] text-white px-4 py-2 rounded-full">
-          Start Quiz
-        </button>
+        <Link
+          href="/dashboard/exams"
+          className="bg-[#5573ea] text-white px-4 py-2 rounded-full text-center"
+        >
+          {t('browse-exams')}
+        </Link>
       </div>
 
       <div className="bg-white shadow-lg p-6 rounded-lg">
@@ -66,7 +71,7 @@ export default function GetQuizForm() {
           ) : (
             filteredQuizes.map((subject: subjects) => (
               <div key={subject._id} className="relative group">
-                <Link href={`/dashboard/exams`}>
+                <Link href={`/dashboard/exams?subject=${encodeURIComponent(subject._id)}`}>
                   <Image
                     src={subject.icon}
                     alt={subject.name}

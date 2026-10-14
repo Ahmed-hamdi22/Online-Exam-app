@@ -5,8 +5,10 @@ import { Exam } from '@/lib/types/exams';
 import { useQuery } from '@tanstack/react-query';
 import { Loader } from 'lucide-react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 export default function ExamList() {
+  const subjectId = useSearchParams().get('subject');
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['exams'],
     queryFn: getAllExam,
@@ -23,13 +25,17 @@ export default function ExamList() {
     return <p className="text-red-500">{(error as Error).message}</p>;
   }
 
-  if (!data?.exams || data.exams.length === 0) {
+  const exams = data?.exams?.filter(
+    (exam: Exam) => !subjectId || exam.subject === subjectId
+  );
+
+  if (!exams || exams.length === 0) {
     return <p>No exams available.</p>;
   }
 
   return (
     <ul className="flex flex-col gap-4 p-6">
-      {data.exams.map((exam: Exam) => (
+      {exams.map((exam: Exam) => (
         <li
           key={exam._id}
           className="h-20 bg-[#EFF6FF] p-4 flex justify-between items-center shadow-sm"

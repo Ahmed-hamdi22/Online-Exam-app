@@ -1,6 +1,7 @@
 import { JSON_HEADER } from '@/lib/constants/api.constant';
 import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
+import { readPublicCatalog } from '@/lib/server/public-catalog';
 
 export async function GET(
   req: NextRequest,
@@ -13,11 +14,19 @@ export async function GET(
     return NextResponse.json({ error: 'Missing examId' }, { status: 400 });
   }
 
+  if (!token?.token) {
+    const exams = await readPublicCatalog('exams');
+    const exam = exams?.find((item) => item._id === examsId);
+    return exam
+      ? NextResponse.json({ message: 'success', exam })
+      : NextResponse.json({ message: 'Exam not found' }, { status: 404 });
+  }
+
   try {
     const response = await fetch(`${process.env.API}/exams/${examsId}`, {
       headers: {
         ...JSON_HEADER,
-        ...(token?.token ? { token: token.token } : {}),
+        token: token.token,
       },
     });
     if (!response.ok) {

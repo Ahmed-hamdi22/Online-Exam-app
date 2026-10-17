@@ -31,28 +31,26 @@ function catalogPath(section: keyof Catalog) {
 export async function readPublicCatalog<K extends keyof Catalog>(
   section: K
 ): Promise<Catalog[K] | null> {
-  if (process.env.NODE_ENV !== 'development') {
-    const entries = section === 'subjects' ? subjectSnapshot : examSnapshot;
-    return entries.length ? (entries as Catalog[K]) : null;
-  }
-
   try {
     const contents = await readFile(catalogPath(section), 'utf8');
     const entries: unknown = JSON.parse(contents);
-    return Array.isArray(entries) && entries.length
-      ? (entries as Catalog[K])
-      : null;
+    if (Array.isArray(entries) && entries.length) {
+      return entries as Catalog[K];
+    }
   } catch {
-    return null;
+    // Deployed hosts can package the checked-in snapshot without a writable file.
   }
+
+  const snapshot = section === 'subjects' ? subjectSnapshot : examSnapshot;
+  return snapshot.length ? (snapshot as Catalog[K]) : null;
 }
 
 export async function savePublicCatalog<K extends keyof Catalog>(
   section: K,
   entries: Catalog[K]
 ) {
-  // The checked-in snapshot serves production. Refresh it while running locally.
-  if (process.env.NODE_ENV !== 'development') return;
+  // Refresh a local server in both `next dev` and `next start`.
+  // Read-only hosts still serve the checked-in snapshot.
   try {
     await mkdir(catalogDirectory, { recursive: true });
     await writeFile(catalogPath(section), JSON.stringify(entries, null, 2) + '\n');

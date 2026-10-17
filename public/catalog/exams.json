@@ -1,1 +1,65 @@
-[]
+[
+  {
+    "_id": "69d980117c82914570305dd5",
+    "title": "JS Basics",
+    "subject": "69d980107c82914570305dbd",
+    "duration": 20,
+    "numberOfQuestions": 10
+  },
+  {
+    "_id": "69d980147c82914570305df7",
+    "title": "Python Basics",
+    "subject": "69d980107c82914570305dc0",
+    "duration": 20,
+    "numberOfQuestions": 10
+  },
+  {
+    "_id": "69d980167c82914570305e19",
+    "title": "HTML & CSS",
+    "subject": "69d980107c82914570305dc3",
+    "duration": 15,
+    "numberOfQuestions": 10
+  },
+  {
+    "_id": "69d980187c82914570305e3b",
+    "title": "Algorithms",
+    "subject": "69d980117c82914570305dc6",
+    "duration": 30,
+    "numberOfQuestions": 10
+  },
+  {
+    "_id": "69d9801a7c82914570305e5d",
+    "title": "React Basics",
+    "subject": "69d980117c82914570305dc9",
+    "duration": 25,
+    "numberOfQuestions": 10
+  },
+  {
+    "_id": "69d9801c7c82914570305e7f",
+    "title": "Node.js API",
+    "subject": "69d980117c82914570305dcc",
+    "duration": 20,
+    "numberOfQuestions": 10
+  },
+  {
+    "_id": "69d9801f7c82914570305ea1",
+    "title": "SQL & NoSQL",
+    "subject": "69d980117c82914570305dcf",
+    "duration": 20,
+    "numberOfQuestions": 10
+  },
+  {
+    "_id": "69d980217c82914570305ec3",
+    "title": "Git Mastery",
+    "subject": "69d980117c82914570305dd2",
+    "duration": 15,
+    "numberOfQuestions": 10
+  },
+  {
+    "_id": "69e25eff04da0d4cf556b31d",
+    "title": "React Quiz",
+    "subject": "69d980117c82914570305dc9",
+    "duration": 20,
+    "numberOfQuestions": 10
+  }
+]

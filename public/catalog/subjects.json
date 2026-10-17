@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "_id": "69d980107c82914570305dbd",
+    "name": "JavaScript",
+    "icon": "https://exam.elevateegy.com/uploads/categories/seeder-javascript.png"
+  },
+  {
+    "_id": "69d980107c82914570305dc0",
+    "name": "Python",
+    "icon": "https://exam.elevateegy.com/uploads/categories/seeder-python.png"
+  },
+  {
+    "_id": "69d980107c82914570305dc3",
+    "name": "HTML & CSS",
+    "icon": "https://exam.elevateegy.com/uploads/categories/seeder-html.png"
+  },
+  {
+    "_id": "69d980117c82914570305dc6",
+    "name": "Data Struct",
+    "icon": "https://exam.elevateegy.com/uploads/categories/seeder-dsa.png"
+  },
+  {
+    "_id": "69d980117c82914570305dc9",
+    "name": "React.js",
+    "icon": "https://exam.elevateegy.com/uploads/categories/seeder-react.png"
+  },
+  {
+    "_id": "69d980117c82914570305dcc",
+    "name": "Node.js",
+    "icon": "https://exam.elevateegy.com/uploads/categories/seeder-nodejs.png"
+  },
+  {
+    "_id": "69d980117c82914570305dcf",
+    "name": "Databases",
+    "icon": "https://exam.elevateegy.com/uploads/categories/seeder-database.png"
+  },
+  {
+    "_id": "69d980117c82914570305dd2",
+    "name": "Git & DevOp",
+    "icon": "https://exam.elevateegy.com/uploads/categories/seeder-git.png"
+  },
+  {
+    "_id": "6a568d32d2ea07268fb2d62a",
+    "name": "Arabic",
+    "icon": "https://exam.elevateegy.com/uploads/categories/6a568d32d2ea07268fb2d628-Microscope.png"
+  }
+]
